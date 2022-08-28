@@ -40,7 +40,17 @@ $ npm install date-fns --save
 # Validar o e-mail
 $ npm install validator --save
 
-# Gráficos do googgle
+# Carregando variáveis de ambiente de um arquivo .env para process.env.
+$ npm install dotenv --save
+
+# Criando o arquivo que armazenará as variáveis necessárias para a aplicação executar.
+$ touch .ENV
+
+# Crie duas variáveis como mostra a seguir:
+$ PUBLIC_URL='URL da aplicação em produção.'
+$ PORT='Porta da aplicação em produção.'
+$ SERVER_URL='URL da API.'
+$ SERVER_PORT='Porta da API.'
 
 # Rodar o projeto
 $ npm start
