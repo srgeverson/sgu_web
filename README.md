@@ -60,6 +60,13 @@ $ SERVER_PORT='Porta da API.'
 # Gráficos do googgle
 $ npm install react-google-charts --save
 
+# Autenticação Base64
+$ npm install --save base-64
+
+# Adicione as credenciais do grant_type password do do authorization server no arquivo .env
+$ CLIENT_ID='Nome de usuário para a autenticação da API.'
+$ CLIENT_SECRET='Senha de usuário para a autenticação da API.'
+
 # Rodar o projeto
 $ npm start
 
