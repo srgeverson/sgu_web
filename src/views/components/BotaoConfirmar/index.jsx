@@ -23,7 +23,7 @@ const BotaoConfirmar = (props) => {
     }
 
     return (
-        <>
+        <div>
             <Button id="idConfirmar"
                 className="btn btn-success mr-1 btn-sm">
                 <CheckIcon />
@@ -32,8 +32,8 @@ const BotaoConfirmar = (props) => {
             <Tooltip placement="top" isOpen={tooltipOpen} target="idConfirmar" toggle={toggle}>
                 Confirmar Operação
             </Tooltip>
-        </>
-    )
+        </div>
+    );
 
 };
 

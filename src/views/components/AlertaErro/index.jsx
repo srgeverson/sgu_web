@@ -12,7 +12,7 @@ const AlertaErro = (props) => {
                 {props.erro.mensagem}
             </Alert>
             :
-            ""
+            null
     )
 }
 
