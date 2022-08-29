@@ -9,13 +9,15 @@ Antes de começar, você vai precisar ter instalado em sua máquina as seguintes
 [Git](https://git-scm.com) e [Node.js](https://nodejs.org/en/)). 
 Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/)
 
+💡O arquivo ".ENV" que aqui é orientado a ser criado é para ambiente de teste e utilização no docker, caso seja criado um ambiente manualmete crie as variáveis normalmente com os comando <b>export no linux</b> e <b>set para windows</b> com <b>terminal ou cmd</b> respectivamente.
+
 ### 🛠️ Comando executado durante a construção da aplicação
 
 ```bash
 # Instalar o react e o next [https://nextjs.org/docs/getting-started](https://nextjs.org/docs/getting-started).
 $ npx create-react-app sac-web
 
-# Instala o gerenciador de rotas.
+# Instala o gerenciador de rotas [Router DOM](https://v5.reactrouter.com/web/guides/quick-start).
 $ npm install react-router-dom --save
 
 # Instala o gerenciador de histórico de navegação.
@@ -30,6 +32,9 @@ $ npm install redux react-redux redux-thunk --save
 
 # Realizar chamada para API
 $ npm install axios --save
+
+#
+$ npm install @mui/material @emotion/react @emotion/styled
 
 # Instalar a biblioteca de icones
 $ npm install @mui/icons-material --save
@@ -46,11 +51,14 @@ $ npm install dotenv --save
 # Criando o arquivo que armazenará as variáveis necessárias para a aplicação executar.
 $ touch .ENV
 
-# Crie duas variáveis como mostra a seguir:
+# Crie as variáveis de ambiente iniciais como mostra a seguir:
 $ PUBLIC_URL='URL da aplicação em produção.'
 $ PORT='Porta da aplicação em produção.'
 $ SERVER_URL='URL da API.'
 $ SERVER_PORT='Porta da API.'
+
+# Gráficos do googgle
+$ npm install react-google-charts --save
 
 # Rodar o projeto
 $ npm start
