@@ -3,9 +3,10 @@ import ReactDOM from "react-dom/client";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Rotas from './core/routes';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
+ReactDOM
+  .createRoot(document.getElementById("root"))
+  .render(
+    // <React.StrictMode>
     <Rotas />
-  </React.StrictMode>
-);
+    // </React.StrictMode>
+  );
