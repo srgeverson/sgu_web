@@ -13,7 +13,7 @@ const BotaoConfirmar = (props) => {
                     id="idConfirmar"
                     className="btn btn-success btn-sm" disabled>
                     Aguarde
-                    <Spinner className="ml-1" size="sm" color="light" />
+                    <Spinner className="mx-1" size="sm" color="light" />
                 </Button>
                 <Tooltip placement="top" isOpen={tooltipOpen} target="idConfirmar" toggle={toggle}>
                     Processando a confirmação...
@@ -25,9 +25,9 @@ const BotaoConfirmar = (props) => {
     return (
         <div>
             <Button id="idConfirmar"
-                className="btn btn-success mr-1 btn-sm">
+                className="btn btn-success btn-sm">
                 <CheckIcon />
-                <span className="text-white"> Confirmar</span>
+                <span className="text-white">Confirmar</span>
             </Button>
             <Tooltip placement="top" isOpen={tooltipOpen} target="idConfirmar" toggle={toggle}>
                 Confirmar Operação
