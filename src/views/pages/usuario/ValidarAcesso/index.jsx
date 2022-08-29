@@ -10,6 +10,7 @@ import BotaoLogin from '../../../components/BotaoLogin';
 const Login = (props) => {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [senhaConfirma, setSenhaConfirma] = useState("");
     const [atencao, setAtencao] = useState("");
     const [sucesso, setSucesso] = useState("");
     const [erro, setErro] = useState("");
@@ -70,7 +71,6 @@ const Login = (props) => {
                                 onChange={(ev) => setEmail(ev.target.value)} required />
                         </InputGroup>
                     </FormGroup>
-
                     <FormGroup>
                         <InputGroup>
                             <InputGroupText style={{ height: 46 }}>Senha</InputGroupText>
@@ -83,13 +83,21 @@ const Login = (props) => {
                                 onChange={(ev) => setSenha(ev.target.value)} required />
                         </InputGroup>
                     </FormGroup>
-
+                    <FormGroup>
+                        <InputGroup>
+                            <InputGroupText style={{ height: 46 }}>Senha</InputGroupText>
+                            <Input
+                                type="password"
+                                value={senhaConfirma}
+                                name="senhaConfirma"
+                                id="senhaConfirma"
+                                placeholder="Confirmar senha do usuário"
+                                onChange={(ev) => setSenhaConfirma(ev.target.value)} required />
+                        </InputGroup>
+                    </FormGroup>
                     <BotaoLogin aguardando={aguardando} />
-
                     <p className="text-center mt-2">
-                        <Link to='/sgu_web/criar-conta' className='remove-sublinhado'>Cadastrar</Link>
-                        {' - '}
-                        <Link to='/sgu_web/recuperar-senha' className='remove-sublinhado'>Esqueceu a senha?</Link>
+                        <Link to='/sgu_web/' className='remove-sublinhado'>Login</Link>
                     </p>
                 </Form>
             </div>

@@ -46,7 +46,7 @@ const RecuperarSenha = (props) => {
         <div className="container-login">
             <div className="login card shadow">
                 <Form onSubmit={recuperaSenha} className="form-signin text-center">
-                    <img className="mb-4" src={logo_sistema} alt="SAC" width="72" height="72" />
+                    <img className="mb-4" src={logo_sistema} alt="logo" width="72" height="72" />
                     <h1 className="h3 mb-3 font-weight-normal">Recuperar Senha</h1>
                     <AlertaErro erro={erro} />
                     <AlertaAtencao atencao={atencao} />
