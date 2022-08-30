@@ -6,17 +6,18 @@ import AlertaErro from '../../../components/AlertaErro';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
 import BotaoLogin from '../../../components/BotaoLogin';
+import { authorizationServerLogin } from '../../../../core/api';
 
-const Login = (props) => {
-    const [email, setEmail] = useState("");
-    const [senha, setSenha] = useState("");
-    const [atencao, setAtencao] = useState("");
-    const [sucesso, setSucesso] = useState("");
-    const [erro, setErro] = useState("");
+const Login = () => {
+    const [email, setEmail] = useState('geversonjosedesouza@hotmail.com');
+    const [senha, setSenha] = useState('123456');
+    const [atencao, setAtencao] = useState('');
+    const [sucesso, setSucesso] = useState('');
+    const [erro, setErro] = useState('');
     const [aguardando, setAguardando] = useState(false);
     const location = useLocation();
+    const [formularioSucesso, setFormularioSucesso] = useState(false);
 
-    //Ao renderizar componente
     useEffect(() => {
         if (location && location.state) {
             setEmail(location.state.email)
@@ -25,21 +26,41 @@ const Login = (props) => {
         // eslint-disable-next-line
     }, []);
 
-    const login = (e) => {
+    const login = async (e) => {
         e.preventDefault();
-        setErro("");
-        setAtencao("");
-        if (!criticas()) return;
+
+        if (!criticas())
+            return;
+
+        //const dados = { username: email, password: senha, grant_type: 'password' };
+
         setAguardando(true);
-        props.handleLogin({ email, senha }, (retorno) => {
-            if (retorno.erro) {
-                setErro({ mensagem: retorno.erro.mensagem });
-                setAguardando(false);
-            } else {
-                setErro("");
-                setAguardando(false);
-            }
-        });
+
+        await authorizationServerLogin()
+            .post('/usuarios/token', `username=${email}&password=${senha}&grant_type=password`)
+            .then((response) => {
+                setErro('');
+                setAtencao('');
+                if (response.data)
+                    setSucesso({ mensagem: response.data.access_token });
+                setFormularioSucesso(true);
+            })
+            .catch((error) => {
+                if (error.response.data) {
+                    if (error.response.data.statusCode === 400 ||
+                        error.response.data.statusCode === 401) {
+                        setSucesso('');
+                        setErro('');
+                        setAtencao({ mensagem: error.response.data.message });
+                    }
+                } else {
+                    setSucesso('');
+                    setAtencao('');
+                    setErro({ mensagem: 'Ocorreu um erro interno, tente novamente se o problema persistir contate o administrador do sistema!' });
+                }
+            });
+
+        setAguardando(false);
     }
 
     const criticas = () => {
@@ -47,6 +68,9 @@ const Login = (props) => {
         if (!senha) return setAtencao({ mensagem: "Preencha o campo senha!" });
         return true;
     }
+
+    if (formularioSucesso)
+        console.log(sucesso);
 
     return (
         <div className="container-login">
@@ -69,7 +93,6 @@ const Login = (props) => {
                                 onChange={(ev) => setEmail(ev.target.value)} required />
                         </InputGroup>
                     </FormGroup>
-
                     <FormGroup>
                         <InputGroup>
                             <InputGroupText style={{ height: 46 }}>Senha</InputGroupText>
@@ -82,9 +105,7 @@ const Login = (props) => {
                                 onChange={(ev) => setSenha(ev.target.value)} required />
                         </InputGroup>
                     </FormGroup>
-
                     <BotaoLogin aguardando={aguardando} />
-
                     <p className="text-center mt-2">
                         <Link to='/sgu_web/criar-conta' className='remove-sublinhado'>Cadastrar</Link>
                         {' - '}
