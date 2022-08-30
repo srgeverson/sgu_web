@@ -30,7 +30,6 @@ const CriarConta = (props) => {
         if (!criticas())
             return;
 
-
         const dados = { nome, email };
 
         setAguardando(true);
@@ -38,10 +37,10 @@ const CriarConta = (props) => {
         await authorizationServerRecuperarSenha()
             .post('/usuarios/sem-senha', dados)
             .then((response) => {
-                console.log(response);
                 setErro('');
                 setAtencao('');
-                setSucesso({ email, mensagem: "Cadastro realizado com sucesso, você receberá um email com código de acesso para criar a senha!" });
+                if(response.data)
+                    setSucesso({ email, mensagem: response.data.mensagem });
                 setFormularioSucesso(true);
             })
             .catch((error) => {

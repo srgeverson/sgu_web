@@ -1,49 +1,69 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { Form, FormGroup, Input, InputGroup, InputGroupText } from 'reactstrap';
 import logo_sistema from '../../../../assets/images/logo_sistema.png';
 import AlertaErro from '../../../components/AlertaErro';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
 import BotaoLogin from '../../../components/BotaoLogin';
+import { authorizationServerRecuperarSenha } from '../../../../core/api';
 
 const Login = (props) => {
-    const [codigo, setCodigo] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [senha, setSenha] = useState(null);
-    const [senhaConfirma, setSenhaConfirma] = useState(null);
-    const [atencao, setAtencao] = useState(null);
-    const [sucesso, setSucesso] = useState(null);
-    const [erro, setErro] = useState(null);
+    const [codigo, setCodigo] = useState('');
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [senhaConfirma, setSenhaConfirma] = useState('');
+    const [atencao, setAtencao] = useState('');
+    const [sucesso, setSucesso] = useState('');
+    const [erro, setErro] = useState('');
     const [aguardando, setAguardando] = useState(false);
+    const [formularioSucesso, setFormularioSucesso] = useState(false);
+    const location = useLocation();
 
-    //Ao renderizar componente
     useEffect(() => {
-        const { location } = props;
-
         if (location && location.state) {
             setEmail(location.state.email)
-            setSucesso(location.state.sucesso);
-            setAtencao(location.state.atencao);
+            setSucesso({ mensagem: location.state.mensagem });
         }
         // eslint-disable-next-line
     }, []);
 
-    const validarAcessoo = (e) => {
+
+    const validarAcesso = async (e) => {
         e.preventDefault();
-        setErro("");
-        setAtencao("");
-        if (!criticas()) return;
+
+        if (!criticas())
+            return;
+
+        const dados = { codigoAcesso: codigo, email, senha };
+
         setAguardando(true);
-        props.handleLogin({ email, senha }, (retorno) => {
-            if (retorno.erro) {
-                setErro({ mensagem: retorno.erro.mensagem });
-                setAguardando(false);
-            } else {
-                setErro("");
-                setAguardando(false);
-            }
-        });
+
+        await authorizationServerRecuperarSenha()
+            .put('/usuarios/validar-acesso', dados)
+            .then((response) => {
+                console.log(response);
+                setErro('');
+                setAtencao('');
+                setSucesso({ email, mensagem: 'Acesso validado com sucesso, agora aproveite nosso sistema!' });
+                setFormularioSucesso(true);
+            })
+            .catch((error) => {
+                console.log(error.response.data)
+                if (error.response.data) {
+                    if (error.response.data.statusCode === 400) {
+                        setSucesso('');
+                        setErro('');
+                        setAtencao({ mensagem: error.response.data.message });
+                    }
+                } else {
+                    setSucesso('');
+                    setAtencao('');
+                    setErro({ mensagem: 'Ocorreu um erro interno, tente novamente se o problema persistir contate o administrador do sistema!' });
+                }
+            });
+
+        setAguardando(false);
     }
 
     const criticas = () => {
@@ -55,10 +75,13 @@ const Login = (props) => {
         return true;
     }
 
+    if (formularioSucesso)
+        return <Navigate to='/sgu_web/' state={sucesso} replace />
+
     return (
         <div className="container-login">
             <div className="login card shadow">
-                <Form onSubmit={validarAcessoo} className="form-signin text-center">
+                <Form onSubmit={validarAcesso} className="form-signin text-center">
                     <img className="mb-4" src={logo_sistema} alt="logo" width="72" height="72" />
                     <h1 className="h3 mb-3 font-weight-normal">Validação de Aecsso</h1>
                     <AlertaErro erro={erro} />

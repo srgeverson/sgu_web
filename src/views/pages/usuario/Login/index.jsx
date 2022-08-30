@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Form, FormGroup, Input, InputGroup, InputGroupText } from 'reactstrap';
 import logo_sistema from '../../../../assets/images/logo_sistema.png';
 import AlertaErro from '../../../components/AlertaErro';
@@ -14,14 +14,13 @@ const Login = (props) => {
     const [sucesso, setSucesso] = useState("");
     const [erro, setErro] = useState("");
     const [aguardando, setAguardando] = useState(false);
+    const location = useLocation();
 
     //Ao renderizar componente
     useEffect(() => {
-        const { location } = props;
-
         if (location && location.state) {
-            setSucesso(location.state.sucesso);
-            setAtencao(location.state.atencao);
+            setEmail(location.state.email)
+            setSucesso({ mensagem: location.state.mensagem });
         }
         // eslint-disable-next-line
     }, []);
