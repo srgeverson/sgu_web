@@ -7,16 +7,14 @@ import AlertaErro from '../../../components/AlertaErro';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
 import BotaoConfirmar from '../../../components/BotaoConfirmar';
-import { recuperarSenha } from '../../../../services/usuario'
-//Teste
 import { authorizationServerRecuperarSenha } from '../../../../core/api';
 
 const CriarConta = (props) => {
-    const [nome, setNome] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [erro, setErro] = useState(null);
-    const [sucesso, setSucesso] = useState(null);
-    const [atencao, setAtencao] = useState(null);
+    const [nome, setNome] = useState('');
+    const [email, setEmail] = useState('');
+    const [erro, setErro] = useState('');
+    const [sucesso, setSucesso] = useState('');
+    const [atencao, setAtencao] = useState('');
     const [aguardando, setAguardando] = useState(false);
     const [formularioSucesso, setFormularioSucesso] = useState(false);
 
@@ -28,30 +26,41 @@ const CriarConta = (props) => {
 
     const cadastrarSemSenha = async (e) => {
         e.preventDefault();
-        if (!criticas()) return;
-        setAguardando(true);
+
+        if (!criticas())
+            return;
+
+
         const dados = { nome, email };
-        await recuperarSenha(dados, (callback) => {
-            console.log(callback);
-            if (callback.erro.erro) {
-                setSucesso("");
-                setErro({ mensagem: callback.erro.mensagem });
-            } else {
-                setErro("");
-                setSucesso({ mensagem: "Cadastro realizado com sucesso, você receberá um email com código de acesso para criar asenha!" });
-                setFormularioSucesso(true);
-            }
-        });
-        //Teste
-        authorizationServerRecuperarSenha()
+
+        setAguardando(true);
+
+        await authorizationServerRecuperarSenha()
             .post('/usuarios/sem-senha', dados)
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
+            .then((response) => {
+                console.log(response);
+                setErro('');
+                setAtencao('');
+                setSucesso({ email, mensagem: "Cadastro realizado com sucesso, você receberá um email com código de acesso para criar a senha!" });
+                setFormularioSucesso(true);
+            })
+            .catch((error) => {
+                if (error.response.data) {
+                    if (error.response.data.statusCode === 400) {
+                        setSucesso('');
+                        setErro('');
+                        setAtencao({ mensagem: error.response.data.message });
+                    }
+                } else {
+                    setSucesso('');
+                    setAtencao('');
+                    setErro({ mensagem: 'Ocorreu um erro interno, tente novamente se o problema persistir contate o administrador do sistema!' });
+                }
+            });
 
         setAguardando(false);
     }
 
-    //Ao renderizar o componente
     useEffect(() => {
         setAguardando(true);
         if (props.params)
@@ -60,8 +69,10 @@ const CriarConta = (props) => {
         // eslint-disable-next-line
     }, [])
 
-    if (formularioSucesso)
+    if (formularioSucesso) {
+        console.log(sucesso)
         return <Navigate to='/sgu_web/validar-acesso' state={sucesso} replace />
+    }
 
     return (
         <div className="container-login">
