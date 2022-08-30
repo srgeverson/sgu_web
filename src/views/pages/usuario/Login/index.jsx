@@ -41,8 +41,10 @@ const Login = () => {
             .then((response) => {
                 setErro('');
                 setAtencao('');
-                if (response.data)
+                if (response.data){
                     setSucesso({ mensagem: response.data.access_token });
+                    localStorage.setItem('token',JSON.stringify(response.data.access_token));
+                }
                 setFormularioSucesso(true);
             })
             .catch((error) => {
