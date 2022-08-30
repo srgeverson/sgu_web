@@ -68,10 +68,8 @@ const CriarConta = (props) => {
         // eslint-disable-next-line
     }, [])
 
-    if (formularioSucesso) {
-        console.log(sucesso)
+    if (formularioSucesso) 
         return <Navigate to='/sgu_web/validar-acesso' state={sucesso} replace />
-    }
 
     return (
         <div className="container-login">

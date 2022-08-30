@@ -5,42 +5,57 @@ import logo_sistema from '../../../../assets/images/logo_sistema.png';
 import BotaoEnviar from '../../../components/BotaoEnviar';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaErro from '../../../components/AlertaErro';
+import { authorizationServerRecuperarSenha } from '../../../../core/api';
 
-const RecuperarSenha = (props) => {
+const RecuperarSenha = () => {
     const [email, setEmail] = useState("");
     const [erro, setErro] = useState("");
     const [sucesso, setSucesso] = useState("");
     const [atencao, setAtencao] = useState("");
     const [aguardando, setAguardando] = useState(false);
-    const [formularioPronto, setFormularioPronto] = useState(false);
+    const [formularioSucesso, setFormularioSucesso] = useState(false);
 
     const criticas = () => {
         if (!email) return setAtencao({ mensagem: "Preencha o campo e-mail!" });
         return true;
     }
 
-    const recuperaSenha = (e) => {
+    const recuperaSenha = async (e) => {
         e.preventDefault();
-        if (!criticas()) return;
+
+        if (!criticas())
+            return;
+
+        const dados = { email };
+
         setAguardando(true);
-        props.recuperarSenha({ email }, (retorno) => {
-            if (retorno.erro.erro) {
-                setAtencao("");
-                setSucesso("");
-                setErro({ mensagem: retorno.erro.mensagem });
-                setAguardando(false);
-            } else {
-                setAtencao("");
-                setErro("");
-                setSucesso({ mensagem: retorno.erro.mensagem });
-                setFormularioPronto(true);
-                setAguardando(false);
-            }
-        })
+
+        await authorizationServerRecuperarSenha()
+            .put('/usuarios/recuperar-acesso', dados)
+            .then((response) => {
+                setErro('');
+                setAtencao('');
+                if(response.data)
+                    setSucesso({ email, mensagem: response.data.mensagem });
+                setFormularioSucesso(true);
+            })
+            .catch((error) => {
+                if (error.response.data) {
+                    if (error.response.data.statusCode === 400) {
+                        setSucesso('');
+                        setErro('');
+                        setAtencao({ mensagem: error.response.data.message });
+                    }
+                } else {
+                    setSucesso('');
+                    setAtencao('');
+                    setErro({ mensagem: 'Ocorreu um erro interno, tente novamente se o problema persistir contate o administrador do sistema!' });
+                }
+            });
     }
 
-    if (formularioPronto) 
-        return <Navigate to='/' state={sucesso} replace/>
+    if (formularioSucesso)
+        return <Navigate to='/sgu_web/validar-acesso' state={sucesso} replace />
 
     return (
         <div className="container-login">

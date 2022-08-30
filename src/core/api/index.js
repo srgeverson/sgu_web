@@ -1,10 +1,5 @@
 import axios from 'axios';
 import { encode } from 'base-64';
-// import {config} from 'dotenv';
-
-// const client_id = process.env.CLIENT_ID;
-// const client_secret = process.env.CLIENT_SECRET;
-// const url_api = `${process.env.SERVER_URL}:${process.env.SERVER_PORT}/v1`;
 
 const client_id = 'api_node';
 const client_secret = '123321';
@@ -32,7 +27,6 @@ const authorizationServerLogin = () => {
 }
 
 const authorizationServerRecuperarSenha = () => {
-    console.log(url_api);
     return axios.create({
         baseURL: url_api,
         headers: {

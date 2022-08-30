@@ -5,10 +5,10 @@ import logo_sistema from '../../../../assets/images/logo_sistema.png';
 import AlertaErro from '../../../components/AlertaErro';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
-import BotaoLogin from '../../../components/BotaoLogin';
+import BotaoValidar from '../../../components/BotaoValidar';
 import { authorizationServerRecuperarSenha } from '../../../../core/api';
 
-const Login = (props) => {
+const Login = () => {
     const [codigo, setCodigo] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
@@ -28,7 +28,6 @@ const Login = (props) => {
         // eslint-disable-next-line
     }, []);
 
-
     const validarAcesso = async (e) => {
         e.preventDefault();
 
@@ -41,15 +40,13 @@ const Login = (props) => {
 
         await authorizationServerRecuperarSenha()
             .put('/usuarios/validar-acesso', dados)
-            .then((response) => {
-                console.log(response);
+            .then(() => {
                 setErro('');
                 setAtencao('');
                 setSucesso({ email, mensagem: 'Acesso validado com sucesso, agora aproveite nosso sistema!' });
                 setFormularioSucesso(true);
             })
             .catch((error) => {
-                console.log(error.response.data)
                 if (error.response.data) {
                     if (error.response.data.statusCode === 400) {
                         setSucesso('');
@@ -135,7 +132,7 @@ const Login = (props) => {
                                 onChange={(ev) => setSenhaConfirma(ev.target.value)} required />
                         </InputGroup>
                     </FormGroup>
-                    <BotaoLogin aguardando={aguardando} />
+                    <BotaoValidar aguardando={aguardando} />
                     <p className="text-center mt-2">
                         <Link to='/sgu_web/criar-conta' className='remove-sublinhado'>Cadastrar</Link>
                         {' - '}
