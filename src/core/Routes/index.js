@@ -10,6 +10,7 @@ import CriarConta from '../../views/pages/usuario/CriarConta';
 import RecuperarSenha from '../../views/pages/usuario/RecuperarSenha';
 import ValidarAcesso from '../../views/pages/usuario/ValidarAcesso';
 import PainelDeControle from '../../views/pages/PainelDeControle';
+import PaginaInexistente from '../../views/pages/PaginaInexistente';
 
 const Rotas = () => {
     return (
@@ -26,6 +27,7 @@ const Rotas = () => {
                         <Route path='/sgu_web/painel-de-controle' element={<AuthorizeRoutes/>}>
                             <Route path='/sgu_web/painel-de-controle' element={authenticatedContainer(PainelDeControle)} />
                         </Route>
+                        <Route path="*" element={<PaginaInexistente />} />
                     </Routes>
                 </AuthProvider>
             </Fragment>

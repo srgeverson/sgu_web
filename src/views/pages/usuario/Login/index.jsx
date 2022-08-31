@@ -22,8 +22,11 @@ const Login = () => {
         if (location && location.state) {
             if (location.state.email)
                 setEmail(location.state.email);
+            
             if (location.state.erro === true)
                 setErro({ mensagem: location.state.mensagem });
+            else if (location.state.alerta === true)
+                setAtencao({ mensagem: location.state.mensagem });
             else
                 setSucesso({ mensagem: location.state.mensagem });
         }

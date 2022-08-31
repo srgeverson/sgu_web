@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
+import ModalCarregando from '../../views/components/ModalCarregando';
 
 const Context = createContext();
 
@@ -19,12 +20,10 @@ const AuthProvider = ({ children }) => {
         getToken();
     }, []);
 
-    const handleLogout = async () =>{
-        localStorage.removeItem('token');
-    }
+    const handleLogout = async () => localStorage.removeItem('token');
 
-    if (loading) 
-        return <h1>Procurando usuário logado...</h1>;
+    if (loading)
+        return <ModalCarregando isOpen={true} pagina='Procurando usuário logado...' />;
 
     return (
         <Context.Provider value={{ token, handleLogout }}>
