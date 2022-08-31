@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { Form, FormGroup, Input, InputGroup, InputGroupText } from 'reactstrap';
 import logo_sistema from '../../../../assets/images/logo_sistema.png';
 import AlertaErro from '../../../components/AlertaErro';
@@ -9,8 +9,8 @@ import BotaoLogin from '../../../components/BotaoLogin';
 import { authorizationServerLogin } from '../../../../core/api';
 
 const Login = () => {
-    const [email, setEmail] = useState('geversonjosedesouza@hotmail.com');
-    const [senha, setSenha] = useState('123456');
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
     const [atencao, setAtencao] = useState('');
     const [sucesso, setSucesso] = useState('');
     const [erro, setErro] = useState('');
@@ -20,8 +20,12 @@ const Login = () => {
 
     useEffect(() => {
         if (location && location.state) {
-            setEmail(location.state.email)
-            setSucesso({ mensagem: location.state.mensagem });
+            if (location.state.email)
+                setEmail(location.state.email);
+            if (location.state.erro === true)
+                setErro({ mensagem: location.state.mensagem });
+            else
+                setSucesso({ mensagem: location.state.mensagem });
         }
         // eslint-disable-next-line
     }, []);
@@ -32,8 +36,6 @@ const Login = () => {
         if (!criticas())
             return;
 
-        //const dados = { username: email, password: senha, grant_type: 'password' };
-
         setAguardando(true);
 
         await authorizationServerLogin()
@@ -41,9 +43,9 @@ const Login = () => {
             .then((response) => {
                 setErro('');
                 setAtencao('');
-                if (response.data){
+                if (response.data) {
+                    localStorage.setItem('token', JSON.stringify(response.data.access_token));
                     setSucesso({ mensagem: response.data.access_token });
-                    localStorage.setItem('token',JSON.stringify(response.data.access_token));
                 }
                 setFormularioSucesso(true);
             })
@@ -70,9 +72,8 @@ const Login = () => {
         if (!senha) return setAtencao({ mensagem: "Preencha o campo senha!" });
         return true;
     }
-
     if (formularioSucesso)
-        console.log(sucesso);
+        return <Navigate to='/sgu_web/painel-de-controle' replace />
 
     return (
         <div className="container-login">

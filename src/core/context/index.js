@@ -4,19 +4,26 @@ const Context = createContext();
 
 const AuthProvider = ({ children }) => {
 
-    const [authenticated, setAuthenticated] = useState(false);
+    const [token, setToken] = useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+
         const getToken = async () => {
-            const token = localStorage.getItem('token');
-            if (token)
-                setAuthenticated(true);
+            const tokenLocal = localStorage.getItem('token');
+            if (tokenLocal)
+                setToken(tokenLocal);
+            setLoading(false);
         }
+
         getToken();
     }, []);
 
+    if (loading) 
+        return <h1>Procurando usuário logado...</h1>;
+
     return (
-        <Context.Provider value={{ authenticated }}>
+        <Context.Provider value={{ token }}>
             {children}
         </Context.Provider>
     );
