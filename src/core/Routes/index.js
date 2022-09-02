@@ -10,6 +10,7 @@ import CriarConta from '../../views/pages/usuario/CriarConta';
 import RecuperarSenha from '../../views/pages/usuario/RecuperarSenha';
 import ValidarAcesso from '../../views/pages/usuario/ValidarAcesso';
 import PainelDeControle from '../../views/pages/PainelDeControle';
+import PermissaoListar from '../../views/pages/permissao/Listar';
 import PaginaInexistente from '../../views/pages/PaginaInexistente';
 
 const Rotas = () => {
@@ -24,8 +25,11 @@ const Rotas = () => {
                         <Route path='/sgu_web/recuperar-senha' element={unauthenticatedContainer(RecuperarSenha)} />
                         <Route path='/sgu_web/validar-acesso' element={unauthenticatedContainer(ValidarAcesso)} />
                         {/* Rotas autenticadas */}
-                        <Route path='/sgu_web/painel-de-controle' element={<AuthorizeRoutes/>}>
+                        <Route path='/sgu_web/painel-de-controle' element={<AuthorizeRoutes />}>
                             <Route path='/sgu_web/painel-de-controle' element={authenticatedContainer(PainelDeControle)} />
+                        </Route>
+                        <Route path='/sgu_web/permissoes' element={<AuthorizeRoutes />}>
+                            <Route path='/sgu_web/permissoes' element={authenticatedContainer(PermissaoListar)} />
                         </Route>
                         <Route path="*" element={<PaginaInexistente />} />
                     </Routes>

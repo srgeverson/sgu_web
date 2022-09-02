@@ -3,7 +3,7 @@ import { authorizationServerRecuperarSenha } from '../core/api';
 export const recuperarSenha = (usuario, callback) => {
     console.log(usuario);
     return async () => {
-      await  authorizationServerRecuperarSenha()
+        await authorizationServerRecuperarSenha()
             .post(
                 '/usuarios/sem-senha',
                 usuario
@@ -25,4 +25,8 @@ export const recuperarSenha = (usuario, callback) => {
                 console.log(callbackError);
             });
     }
+}
+
+export const removerUsuario = async () => {
+    return;
 }
