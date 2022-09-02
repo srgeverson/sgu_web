@@ -5,13 +5,12 @@ const client_id = 'api_node';
 const client_secret = '123321';
 const url_api = `http://localhost:8080/v1`;
 
-const api = () => {
-    const token = localStorage.getItem('token');
+const api = (token) => {
     return axios.create({
         baseURL: url_api,
         headers: {
             'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${JSON.parse(token)}`,
         }
     });
 }
@@ -37,4 +36,4 @@ const authorizationServerRecuperarSenha = () => {
     });
 }
 
-export {api, authorizationServerLogin, authorizationServerRecuperarSenha };
+export { api, authorizationServerLogin, authorizationServerRecuperarSenha };

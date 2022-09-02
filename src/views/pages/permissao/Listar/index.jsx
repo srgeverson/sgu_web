@@ -10,19 +10,19 @@ import BotaoPesquisar from '../../../components/BotaoPesquisar';
 import ModalAtivar from '../../../components/ModalAtivar';
 import ModalDesativar from '../../../components/ModalDesativar';
 import ModalCarregando from '../../../components/ModalCarregando';
-import {listarTodas} from '../../../../services/permissao';
+import PermissaoService from '../../../../services/PermissaoService';
 
 const Listar = () => {
     const [atencao, setAtencao] = useState('');
     const [sucesso, setSucesso] = useState('');
     const [erro, setErro] = useState('');
+    const [idParaAtivarOuDesativar, setIdParaAtivarOuDesativar] = useState('');
     const [aguardando, setAguardando] = useState(false);
     const [confirmarAtivacao, setConfirmarAtivacao] = useState(false);
-    const [idParaAtivar, setIdParaAtivar] = useState(null);
     const [confirmarDesativacao, setConfirmarDesativacao] = useState(false);
-    const [idParaDesativar, setIdParaDesativar] = useState(null);
     const [permissoes, setPermissoes] = useState([]);
     const location = useLocation();
+    const permissaoService = new PermissaoService();
 
     useEffect(() => {
         if (location && location.state) {
@@ -39,106 +39,73 @@ const Listar = () => {
     //#region -> Início rotina de ativação
     const ativarUsuario = async () => {
         setAguardando(true);
-        await ativarUsuario({ id: idParaAtivar, ativo: true }, (retorno) => {
-            if (retorno.erro.erro) {
-                setErro({ mensagem: retorno.erro.mensagem });
+        const ativar = await permissaoService.ativar(idParaAtivarOuDesativar);
+        if (ativar.statusCode) {
+            if (ativar.statusCode === 500) {
+                setAtencao('');
+                setSucesso('');
+                setErro({ mensagem: ativar.message });
             } else {
-                setSucesso({ mensagem: retorno.erro.mensagem });
-                setConfirmarAtivacao(false);
-                pesquisarUsuarios();
+                setErro('');
+                setSucesso('');
+                setAtencao({ mensagem: ativar.message });
             }
-        });
+        } else {
+            setSucesso({ mensagem: 'Sucesso!' });
+            setConfirmarAtivacao(false);
+            pesquisarUsuarios();
+        }
         setAguardando(false);
     }
 
     const abrirConfirmarAtivacao = (id) => {
         setConfirmarAtivacao(true);
-        setIdParaAtivar(id);
+        setIdParaAtivarOuDesativar(id);
     }
     //#endregion -> Fim rotina de ativação
 
     //#region ->Início rotina de desativação
-    const desativarUsuario = () => {
+    const desativarUsuario = async () => {
         setAguardando(true);
-        ativarUsuario({ id: idParaDesativar, ativo: false }, (retorno) => {
-            if (retorno.erro.erro) {
-                setErro({ erro: retorno.erro.mensagem });
-                setAguardando(false);
+        const desativar = await permissaoService.desativar(idParaAtivarOuDesativar);
+        if (desativar.statusCode) {
+            if (desativar.statusCode === 500) {
+                setAtencao('');
+                setSucesso('');
+                setErro({ mensagem: desativar.message });
             } else {
-                setSucesso({ mensagem: retorno.erro.mensagem });
-                setAguardando(false);
-                setConfirmarDesativacao(false);
-                pesquisarUsuarios();
+                setErro('');
+                setSucesso('');
+                setAtencao({ mensagem: desativar.message });
             }
-        });
+        } else {
+            setSucesso({ mensagem: 'Sucesso!' });
+            setConfirmarDesativacao(false);
+            pesquisarUsuarios();
+        }
+        setAguardando(false);
     }
 
     const abrirConfirmarDesativacao = (id) => {
         setConfirmarDesativacao(true);
-        setIdParaDesativar(id);
+        setIdParaAtivarOuDesativar(id);
     }
     //#endregion -> Fim rotina de desativação
 
     //Início da rotina de pesquisa
     const pesquisarUsuarios = async () => {
         setAguardando(true);
-        const teste = await listarTodas();
-        console.log(teste);
-        setPermissoes([]);
-        // await setTimeout(() => {
-        //     console.log('Hello, World!');
-        //     setPermissoes([
-        //         {
-        //             "id": 1,
-        //             "nome": "listar_permissao",
-        //             "descricao": "Permite visualizar todas as permissões.",
-        //             "ativo": true,
-        //             "data_cadastro": "2022-08-28T02:57:31.082Z",
-        //             "data_operacao": "2022-08-28T02:57:31.082Z"
-        //         },
-        //         {
-        //             "id": 2,
-        //             "nome": "listar_usuario",
-        //             "descricao": "Permite visualizar todos os Permissões.",
-        //             "ativo": true,
-        //             "data_cadastro": "2022-08-28T02:57:31.082Z",
-        //             "data_operacao": "2022-08-28T02:57:31.082Z"
-        //         },
-        //         {
-        //             "id": 3,
-        //             "nome": "editar_usuario",
-        //             "descricao": "Permite editar usuário.",
-        //             "ativo": true,
-        //             "data_cadastro": "2022-08-28T02:57:31.082Z",
-        //             "data_operacao": "2022-08-28T02:57:31.082Z"
-        //         },
-        //         {
-        //             "id": 4,
-        //             "nome": "cadastrar_usuario",
-        //             "descricao": "Permite cadastrar usuário.",
-        //             "ativo": true,
-        //             "data_cadastro": "2022-08-28T02:57:31.082Z",
-        //             "data_operacao": "2022-08-28T02:57:31.082Z"
-        //         },
-        //         {
-        //             "id": 5,
-        //             "nome": "excluir_usuario",
-        //             "descricao": "Permite excluir usuário.",
-        //             "ativo": true,
-        //             "data_cadastro": "2022-08-28T02:57:31.082Z",
-        //             "data_operacao": "2022-08-28T02:57:31.082Z"
-        //         },
-        //         {
-        //             "id": 6,
-        //             "nome": "proprio_usuario",
-        //             "descricao": "Permite acesso aos recursos apenas do perfil do próprio usuário.",
-        //             "ativo": true,
-        //             "data_cadastro": "2022-08-28T02:57:31.082Z",
-        //             "data_operacao": "2022-08-28T02:57:31.082Z"
-        //         }
-        //     ]);
-        //     setAguardando(false);
-        // }, 3000);
+        const listarTodas = await permissaoService.listarTodas();
+        if (listarTodas.statusCode) {
+            if (listarTodas.statusCode === 500) {
+                setAtencao('');
+                setErro({ mensagem: listarTodas.message });
+            } else {
+                setErro('');
+                setAtencao({ mensagem: listarTodas.message });
+            }
+        } else
+            setPermissoes(listarTodas);
         setAguardando(false);
     }
 
@@ -146,13 +113,15 @@ const Listar = () => {
         <div>
             <ModalAtivar isOpen={confirmarAtivacao} toogle={() => setConfirmarAtivacao(false)} ativar='Permissão' aguardando={aguardando} ativarObjeto={() => ativarUsuario()} />
             <ModalDesativar isOpen={confirmarDesativacao} toogle={() => setConfirmarDesativacao(false)} desativar='Permissão' aguardando={aguardando} desativarObjeto={() => desativarUsuario()} />
-            <div className="d-flex">
+            <div className="d-flex justify-content-between">
                 <div className="mr-auto p-2">
                     <h2 className="display-4 titulo">Permissões</h2>
                 </div>
-                <AlertaErro erro={erro} />
-                <AlertaAtencao atencao={atencao} />
-                <AlertaSucesso sucesso={sucesso} />
+                <div className="mr-auto p-2">
+                    <AlertaErro erro={erro} />
+                    <AlertaAtencao atencao={atencao} />
+                    <AlertaSucesso sucesso={sucesso} />
+                </div>
             </div>
             <hr />
             <div className="form-group row">
@@ -184,7 +153,11 @@ const Listar = () => {
                                         <th>{permissao.nome}</th>
                                         <td className="d-none d-sm-table-cell">{permissao.descricao}</td>
                                         <td className="text-center">
-                                            {permissao.ativo ? <BotaoDesativar onClick={() => abrirConfirmarDesativacao(permissao._id)} /> : <BotaoAtivar onClick={() => abrirConfirmarAtivacao(permissao._id)} />}
+                                            {
+                                                permissao.ativo ?
+                                                    <BotaoDesativar onClick={() => abrirConfirmarDesativacao(permissao.id)} /> :
+                                                    <BotaoAtivar onClick={() => abrirConfirmarAtivacao(permissao.id)} />
+                                            }
                                         </td>
                                     </tr>
                                 )
