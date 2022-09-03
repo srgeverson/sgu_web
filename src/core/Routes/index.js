@@ -11,6 +11,8 @@ import RecuperarSenha from '../../views/pages/usuario/RecuperarSenha';
 import ValidarAcesso from '../../views/pages/usuario/ValidarAcesso';
 import PainelDeControle from '../../views/pages/PainelDeControle';
 import PermissaoListar from '../../views/pages/permissao/Listar';
+import UsuarioAlterar from '../../views/pages/usuario/Alterar';
+import UsuarioListar from '../../views/pages/usuario/Listar';
 import PaginaInexistente from '../../views/pages/PaginaInexistente';
 
 const Rotas = () => {
@@ -30,6 +32,12 @@ const Rotas = () => {
                         </Route>
                         <Route path='/sgu_web/permissoes' element={<AuthorizeRoutes />}>
                             <Route path='/sgu_web/permissoes' element={authenticatedContainer(PermissaoListar)} />
+                        </Route>
+                        <Route path='/sgu_web/usuarios' element={<AuthorizeRoutes />}>
+                            <Route path='/sgu_web/usuarios' element={authenticatedContainer(UsuarioListar)} />
+                        </Route>
+                        <Route path='/sgu_web/usuarios-alterar/:id' element={<AuthorizeRoutes />}>
+                            <Route path='/sgu_web/usuarios-alterar/:id' element={authenticatedContainer(UsuarioAlterar)} />
                         </Route>
                         <Route path="*" element={<PaginaInexistente />} />
                     </Routes>

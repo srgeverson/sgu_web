@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { FormGroup } from 'reactstrap';
+import { DropdownMenu, DropdownToggle, FormGroup, UncontrolledButtonDropdown } from 'reactstrap';
 import AlertaErro from '../../../components/AlertaErro';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
 import BotaoAtivar from '../../../components/BotaoAtivar';
+import BotaoEditar from '../../../components/BotaoEditar';
 import BotaoDesativar from '../../../components/BotaoDesativar';
 import BotaoPesquisar from '../../../components/BotaoPesquisar';
 import ModalAtivar from '../../../components/ModalAtivar';
 import ModalDesativar from '../../../components/ModalDesativar';
 import ModalCarregando from '../../../components/ModalCarregando';
-import PermissaoService from '../../../../services/PermissaoService';
+import UsuarioService from '../../../../services/UsuarioService';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const Listar = () => {
     const [atencao, setAtencao] = useState('');
@@ -20,9 +22,9 @@ const Listar = () => {
     const [aguardando, setAguardando] = useState(false);
     const [confirmarAtivacao, setConfirmarAtivacao] = useState(false);
     const [confirmarDesativacao, setConfirmarDesativacao] = useState(false);
-    const [permissoes, setPermissoes] = useState([]);
+    const [usuarios, setUsuarios] = useState([]);
     const location = useLocation();
-    const permissaoService = new PermissaoService();
+    const usuarioService = new UsuarioService();
 
     useEffect(() => {
         if (location && location.state) {
@@ -37,9 +39,9 @@ const Listar = () => {
     }, []);
 
     //#region -> Início rotina de ativação
-    const ativarPermissao = async () => {
+    const ativarUsuario = async () => {
         setAguardando(true);
-        const ativar = await permissaoService.ativar(idParaAtivarOuDesativar);
+        const ativar = await usuarioService.ativar(idParaAtivarOuDesativar);
         if (ativar.statusCode) {
             if (ativar.statusCode === 500) {
                 setAtencao('');
@@ -53,7 +55,7 @@ const Listar = () => {
         } else {
             setSucesso({ mensagem: 'Sucesso!' });
             setConfirmarAtivacao(false);
-            pesquisarPermissoes();
+            pesquisarUsuarios();
         }
         setAguardando(false);
     }
@@ -65,9 +67,9 @@ const Listar = () => {
     //#endregion -> Fim rotina de ativação
 
     //#region ->Início rotina de desativação
-    const desativarPermissao = async () => {
+    const desativarUsuario = async () => {
         setAguardando(true);
-        const desativar = await permissaoService.desativar(idParaAtivarOuDesativar);
+        const desativar = await usuarioService.desativar(idParaAtivarOuDesativar);
         if (desativar.statusCode) {
             if (desativar.statusCode === 500) {
                 setAtencao('');
@@ -81,7 +83,7 @@ const Listar = () => {
         } else {
             setSucesso({ mensagem: 'Sucesso!' });
             setConfirmarDesativacao(false);
-            pesquisarPermissoes();
+            pesquisarUsuarios();
         }
         setAguardando(false);
     }
@@ -93,9 +95,9 @@ const Listar = () => {
     //#endregion -> Fim rotina de desativação
 
     //Início da rotina de pesquisa
-    const pesquisarPermissoes = async () => {
+    const pesquisarUsuarios = async () => {
         setAguardando(true);
-        const listarTodas = await permissaoService.listarTodas();
+        const listarTodas = await usuarioService.listarTodas();
         if (listarTodas.statusCode) {
             if (listarTodas.statusCode === 500) {
                 setAtencao('');
@@ -105,17 +107,17 @@ const Listar = () => {
                 setAtencao({ mensagem: listarTodas.message });
             }
         } else
-            setPermissoes(listarTodas);
+            setUsuarios(listarTodas);
         setAguardando(false);
     }
 
     return (
         <div>
-            <ModalAtivar isOpen={confirmarAtivacao} toogle={() => setConfirmarAtivacao(false)} ativar='Permissão' aguardando={aguardando} ativarObjeto={() => ativarPermissao()} />
-            <ModalDesativar isOpen={confirmarDesativacao} toogle={() => setConfirmarDesativacao(false)} desativar='Permissão' aguardando={aguardando} desativarObjeto={() => desativarPermissao()} />
+            <ModalAtivar isOpen={confirmarAtivacao} toogle={() => setConfirmarAtivacao(false)} ativar='Permissão' aguardando={aguardando} ativarObjeto={() => ativarUsuario()} />
+            <ModalDesativar isOpen={confirmarDesativacao} toogle={() => setConfirmarDesativacao(false)} desativar='Permissão' aguardando={aguardando} desativarObjeto={() => desativarUsuario()} />
             <div className="d-flex justify-content-between">
                 <div className="mr-auto p-2">
-                    <h2 className="display-4 titulo">Permissões</h2>
+                    <h2 className="display-4 titulo">Usuários</h2>
                 </div>
                 <div className="mr-auto p-2">
                     <AlertaErro erro={erro} />
@@ -127,35 +129,53 @@ const Listar = () => {
             <div className="form-group row">
                 <div className="col-sm-2">
                     <FormGroup>
-                        <BotaoPesquisar onClickPesquisar={() => pesquisarPermissoes()} />
+                        <BotaoPesquisar onClickPesquisar={() => pesquisarUsuarios()} />
                     </FormGroup>
                 </div>
             </div>
             <div className="table-responsive">
-                <ModalCarregando isOpen={permissoes && aguardando} pagina='Processando solicitação' />
+                <ModalCarregando isOpen={usuarios && aguardando} pagina='Processando solicitação' />
                 <table className="table table-hover table-striped">
                     <thead>
                         <tr>
                             <th className="d-none d-sm-table-cell">Código</th>
                             <th>Nome</th>
-                            <th className="d-none d-sm-table-cell">Descrição</th>
+                            <th className="d-none d-sm-table-cell">E-mail</th>
                             <th className="text-center">Opções</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            permissoes.map(
-                                (permissao) => (
-                                    <tr key={permissao.id} >
-                                        <th className="d-none d-sm-table-cell">{permissao.id}</th>
-                                        <th>{permissao.nome}</th>
-                                        <td className="d-none d-sm-table-cell">{permissao.descricao}</td>
+                            usuarios.map(
+                                (usuario) => (
+                                    <tr key={usuario.id} >
+                                        <th className="d-none d-sm-table-cell">{usuario.id}</th>
+                                        <th>{usuario.nome}</th>
+                                        <td className="d-none d-sm-table-cell">{usuario.email}</td>
                                         <td className="text-center">
-                                            {
-                                                permissao.ativo ?
-                                                    <BotaoDesativar onClick={() => abrirConfirmarDesativacao(permissao.id)} /> :
-                                                    <BotaoAtivar onClick={() => abrirConfirmarAtivacao(permissao.id)} />
-                                            }
+                                            <span className="d-none d-md-block">
+                                                <BotaoEditar uri={`/sgu_web/usuarios-alterar/${usuario.id}`} />
+                                                {usuario.ativo ?
+                                                    <BotaoDesativar onClick={() => abrirConfirmarDesativacao(usuario.id)} /> :
+                                                    <BotaoAtivar onClick={() => abrirConfirmarAtivacao(usuario.id)} />}
+                                            </span>
+                                            <div className="dropdown d-block d-md-none">
+                                                <UncontrolledButtonDropdown>
+                                                    <DropdownToggle outline size="sm">
+                                                        <MoreVertIcon />
+                                                    </DropdownToggle>
+                                                    <DropdownMenu>
+                                                        <BotaoEditar uri={`/sgu_web/usuarios-alterar/${usuario.id}`} />
+                                                        {usuario.ativo ?
+                                                            <BotaoDesativar onClick={() => abrirConfirmarDesativacao(usuario.id)} /> :
+                                                            <BotaoAtivar onClick={() => abrirConfirmarAtivacao(usuario.id)} />}
+                                                    </DropdownMenu>
+                                                </UncontrolledButtonDropdown>
+
+                                                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="acoesListar">
+
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 )
