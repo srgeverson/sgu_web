@@ -117,7 +117,7 @@ const Listar = () => {
             <ModalDesativar isOpen={confirmarDesativacao} toogle={() => setConfirmarDesativacao(false)} desativar='Permissão' aguardando={aguardando} desativarObjeto={() => desativarUsuario()} />
             <div className="d-flex justify-content-between">
                 <div className="mr-auto p-2">
-                    <h2 className="display-4 titulo">Usuários</h2>
+                    <h2 className="display-4 titulo">Usuário</h2>
                 </div>
                 <div className="mr-auto p-2">
                     <AlertaErro erro={erro} />

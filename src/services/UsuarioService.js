@@ -17,6 +17,17 @@ class UsuarioService {
                return errorHandler(callbackError.response);
             });
     }
+    
+    async alterar(id, dados) {
+        return await api(this.token)
+            .put(`/usuarios/id/${id}`, dados)
+            .then((callbackSuccess) => {
+                return callbackSuccess.data;
+            })
+            .catch((callbackError) => {
+               return errorHandler(callbackError.response);
+            });
+    }
 
     async buscarPorId(id) {
         return await api(this.token)

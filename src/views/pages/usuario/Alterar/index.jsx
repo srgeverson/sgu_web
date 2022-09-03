@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import BotaoConfirmar from '../../../components/BotaoConfirmar';
 import AlertaErro from '../../../components/AlertaErro';
@@ -9,27 +9,24 @@ import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
 
 const UsuarioAlterar = () => {
-    const [id, setId] = useState('');
-    const [email, setEmail] = useState('');
-    const [nome, setNome] = useState('');
     const [ativo, setAtivo] = useState(false);
     const [atencao, setAtencao] = useState('');
     const [sucesso, setSucesso] = useState('');
     const [erro, setErro] = useState('');
     const [aguardando, setAguardando] = useState(false);
-    const [usuario, setUsuario] = useState(false,)
+    const [usuario, setUsuario] = useState('')
     const [formularioSucesso, setFormularioSucesso] = useState(false);
     const usuarioService = new UsuarioService();
+    const { id } = useParams();
 
     useEffect(() => {
         receberDadosUsuario();
         // eslint-disable-next-line
-    }, []);
+    }, [id]);
 
     const receberDadosUsuario = async () => {
-        const { id } = this.props.match.params;
+        console.log(id)
         setAguardando(true);
-        setId(id);
         const usuarioPorId = await usuarioService.buscarPorId(id);
         if (usuarioPorId.statusCode) {
             if (usuarioPorId.statusCode === 500) {
@@ -51,8 +48,8 @@ const UsuarioAlterar = () => {
             return;
 
         setAguardando(true);
-        const usuarioAlterado = await usuarioService.alterarUsuario({ id, nome, email, ativo });
-        
+        const usuarioAlterado = await usuarioService.alterar(id, { nome: usuario.nome, email: usuario.email, ativo });
+
         if (usuarioAlterado.statusCode) {
             if (usuarioAlterado.statusCode === 500) {
                 setAtencao('');
@@ -65,37 +62,41 @@ const UsuarioAlterar = () => {
             setSucesso({ mensagem: usuarioAlterado.message });
             setFormularioSucesso(true);
         }
-            
+
         setAguardando(false);
     }
 
     const criticas = () => {
-        const { nome, email } = this.state;
-        if (!nome) return setAtencao({ mensagem: "Preencha o campo nome!" });
-        if (!email) return setAtencao({ mensagem: "Preencha o campo e-mail!" });
         return true;
     }
 
+    const onChangeInput = (field, ev) => {
+       setUsuario({ [field]: ev.target.value });
+    }
+
     if (formularioSucesso)
-        return <Navigate to='/usuarios' state={{ mensagem: 'Usuário alterado com sucesso!' }} replace />
+        return <Navigate to='/sgu_web/usuarios' state={{ mensagem: 'Usuário alterado com sucesso!' }} replace />
 
     return (
         <div>
-            <div className="d-flex">
+            <div className="d-flex justify-content-between">
+                <div className="mr-auto p-2">
+                    <Link to={"/sgu_web/usuarios"}>
+                        <button className="btn btn-outline-success btn-sm">
+                            Listar
+                        </button>
+                    </Link>
+                </div>
                 <div className="mr-auto p-2">
                     <h2 className="display-4 titulo">Alterar Usuário</h2>
                 </div>
-                <Link to={"/usuarios"}>
-                    <button className="btn btn-outline-success btn-sm">
-                        Listar
-                    </button>
-                </Link>
-
-                <Link to={"/usuarios-visualizar/" + 1}>
-                    <button className="ml-1 btn btn-outline-info btn-sm">
-                        Visualisar
-                    </button>
-                </Link>
+                <div className="mr-auto p-2">
+                    <Link to={`/sgu_web/usuarios-visualizar/${id}`}>
+                        <button className="ml-1 btn btn-outline-info btn-sm">
+                            Visualisar
+                        </button>
+                    </Link>
+                </div>
             </div>
             <hr />
             <AlertaErro erro={erro} />
@@ -110,28 +111,28 @@ const UsuarioAlterar = () => {
                     <Label for="nome">Nome</Label>
                     <Input
                         type="text"
-                        value={nome}
+                        value={usuario.nome}
                         name="nome"
                         id="nome"
                         className="form-control"
                         placeholder={usuario ? "Nome do usuário" : "Carregado..."}
                         disabled={usuario ? false : true}
                         autoComplete="nome"
-                        onChange={setNome}
+                        onChange={(ev) => onChangeInput("nome", ev)}
                     />
                 </FormGroup>
                 <FormGroup>
                     <Label for="email">E-mail</Label>
                     <Input
                         type="email"
-                        value={email}
+                        value={usuario.email}
                         name="email"
                         id="email"
                         className="form-control"
                         placeholder={usuario ? "E-mail do usuário" : "Carregando.."}
                         disabled={usuario ? false : true}
                         autoComplete="email"
-                        onChange={setEmail}
+                        onChange={(ev) => onChangeInput("email", ev)}
                     />
                 </FormGroup>
                 <FormGroup check inline>
