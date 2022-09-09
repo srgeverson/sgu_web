@@ -9,12 +9,13 @@ import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
 
 const UsuarioAlterar = () => {
+    const [nome, setNome] = useState('');
+    const [email, setEmail] = useState('');
     const [ativo, setAtivo] = useState(false);
     const [atencao, setAtencao] = useState('');
     const [sucesso, setSucesso] = useState('');
     const [erro, setErro] = useState('');
     const [aguardando, setAguardando] = useState(false);
-    const [usuario, setUsuario] = useState('')
     const [formularioSucesso, setFormularioSucesso] = useState(false);
     const usuarioService = new UsuarioService();
     const { id } = useParams();
@@ -25,7 +26,6 @@ const UsuarioAlterar = () => {
     }, [id]);
 
     const receberDadosUsuario = async () => {
-        console.log(id)
         setAguardando(true);
         const usuarioPorId = await usuarioService.buscarPorId(id);
         if (usuarioPorId.statusCode) {
@@ -36,8 +36,13 @@ const UsuarioAlterar = () => {
                 setErro('');
                 setAtencao({ mensagem: usuarioPorId.message });
             }
-        } else
-            setUsuario(usuarioPorId);
+        } else {
+            if (usuarioPorId) {
+                setNome(usuarioPorId.nome);
+                setEmail(usuarioPorId.email);
+                setAtivo(usuarioPorId.ativo);
+            }
+        }
         setAguardando(false);
     }
 
@@ -48,7 +53,7 @@ const UsuarioAlterar = () => {
             return;
 
         setAguardando(true);
-        const usuarioAlterado = await usuarioService.alterar(id, { nome: usuario.nome, email: usuario.email, ativo });
+        const usuarioAlterado = await usuarioService.alterar(id, { nome, email, ativo });
 
         if (usuarioAlterado.statusCode) {
             if (usuarioAlterado.statusCode === 500) {
@@ -68,10 +73,6 @@ const UsuarioAlterar = () => {
 
     const criticas = () => {
         return true;
-    }
-
-    const onChangeInput = (field, ev) => {
-       setUsuario({ [field]: ev.target.value });
     }
 
     if (formularioSucesso)
@@ -111,41 +112,36 @@ const UsuarioAlterar = () => {
                     <Label for="nome">Nome</Label>
                     <Input
                         type="text"
-                        value={usuario.nome}
+                        value={nome}
                         name="nome"
                         id="nome"
                         className="form-control"
-                        placeholder={usuario ? "Nome do usuário" : "Carregado..."}
-                        disabled={usuario ? false : true}
                         autoComplete="nome"
-                        onChange={(ev) => onChangeInput("nome", ev)}
+                        onChange={(ev) => setNome(ev.target.value)}
                     />
                 </FormGroup>
                 <FormGroup>
                     <Label for="email">E-mail</Label>
                     <Input
                         type="email"
-                        value={usuario.email}
+                        value={email}
                         name="email"
                         id="email"
                         className="form-control"
-                        placeholder={usuario ? "E-mail do usuário" : "Carregando.."}
-                        disabled={usuario ? false : true}
                         autoComplete="email"
-                        onChange={(ev) => onChangeInput("email", ev)}
+                        onChange={(ev) => setEmail(ev.target.value)}
                     />
                 </FormGroup>
                 <FormGroup check inline>
                     <Label for="ativo" check>
                         <Input
                             type="checkbox"
-                            checked={ativo ? true : false}
+                            checked={ativo}
                             value={ativo}
                             name="ativo"
                             id="ativo"
-                            disabled={usuario ? false : true}
                             autoComplete="ativo"
-                            onClick={setAtivo}
+                            onChange={() => setAtivo(!ativo)}
                         /> Ativo
                     </Label>
                 </FormGroup>
