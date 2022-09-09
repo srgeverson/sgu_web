@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Form, FormGroup, Input, InputGroup, InputGroupText } from 'reactstrap';
+import { publicURL } from '../../../../core/config';
 import logo_sistema from '../../../../assets/images/logo_sistema.png';
 import AlertaErro from '../../../components/AlertaErro';
 import AlertaAtencao from '../../../components/AlertaAtencao';
@@ -39,7 +39,7 @@ const CriarConta = (props) => {
             .then((response) => {
                 setErro('');
                 setAtencao('');
-                if(response.data)
+                if (response.data)
                     setSucesso({ email, mensagem: response.data.mensagem });
                 setFormularioSucesso(true);
             })
@@ -68,8 +68,8 @@ const CriarConta = (props) => {
         // eslint-disable-next-line
     }, [])
 
-    if (formularioSucesso) 
-        return <Navigate to='/sgu_web/validar-acesso' state={sucesso} replace />
+    if (formularioSucesso)
+        return <Navigate to={`${publicURL}/validar-acesso`} state={sucesso} replace />
 
     return (
         <div className="container-login">
@@ -106,7 +106,7 @@ const CriarConta = (props) => {
                     </FormGroup>
                     <BotaoConfirmar aguardando={aguardando} />
                     <p className="text-center mt-2">
-                        <Link to='/sgu_web/' className='remove-sublinhado'>Login</Link>
+                        <Link to={`${publicURL}/`} className='remove-sublinhado'>Login</Link>
                     </p>
                 </Form>
             </div>

@@ -6,6 +6,7 @@ import BotaoEnviar from '../../../components/BotaoEnviar';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaErro from '../../../components/AlertaErro';
 import { authorizationServerRecuperarSenha } from '../../../../core/api';
+import { publicURL } from '../../../../core/config';
 
 const RecuperarSenha = () => {
     const [email, setEmail] = useState("");
@@ -35,7 +36,7 @@ const RecuperarSenha = () => {
             .then((response) => {
                 setErro('');
                 setAtencao('');
-                if(response.data)
+                if (response.data)
                     setSucesso({ email, mensagem: response.data.mensagem });
                 setFormularioSucesso(true);
             })
@@ -79,7 +80,7 @@ const RecuperarSenha = () => {
                     </FormGroup>
                     <BotaoEnviar aguardando={aguardando} />
                     <p className="text-center mt-2">
-                        <Link to='/sgu_web/'>Login</Link>
+                        <Link to={`${publicURL}/`} className='remove-sublinhado'>Login</Link>
                     </p>
                 </Form>
             </div>

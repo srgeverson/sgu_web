@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DropdownMenu, DropdownToggle, FormGroup, UncontrolledButtonDropdown } from 'reactstrap';
+import { publicURL } from '../../../../core/config';
 import AlertaErro from '../../../components/AlertaErro';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
 import BotaoAtivar from '../../../components/BotaoAtivar';
+import BotaoCadastrar from '../../../components/BotaoCadastrar';
 import BotaoEditar from '../../../components/BotaoEditar';
 import BotaoDesativar from '../../../components/BotaoDesativar';
 import BotaoPesquisar from '../../../components/BotaoPesquisar';
@@ -132,6 +134,11 @@ const Listar = () => {
                         <BotaoPesquisar onClickPesquisar={() => pesquisarUsuarios()} />
                     </FormGroup>
                 </div>
+                <div className="col-sm-2">
+                    <FormGroup>
+                        <BotaoCadastrar uri={`${publicURL}/usuarios-cadastrar`} descricaoObjeto='Usuario' />
+                    </FormGroup>
+                </div>
             </div>
             <div className="table-responsive">
                 <ModalCarregando isOpen={usuarios && aguardando} pagina='Processando solicitação' />
@@ -154,7 +161,7 @@ const Listar = () => {
                                         <td className="d-none d-sm-table-cell">{usuario.email}</td>
                                         <td className="text-center">
                                             <span className="d-none d-md-block">
-                                                <BotaoEditar uri={`/sgu_web/usuarios-alterar/${usuario.id}`} />
+                                                <BotaoEditar uri={`${publicURL}/usuarios-alterar/${usuario.id}`} />
                                                 {usuario.ativo ?
                                                     <BotaoDesativar onClick={() => abrirConfirmarDesativacao(usuario.id)} /> :
                                                     <BotaoAtivar onClick={() => abrirConfirmarAtivacao(usuario.id)} />}
@@ -165,7 +172,7 @@ const Listar = () => {
                                                         <MoreVertIcon />
                                                     </DropdownToggle>
                                                     <DropdownMenu>
-                                                        <BotaoEditar uri={`/sgu_web/usuarios-alterar/${usuario.id}`} />
+                                                        <BotaoEditar uri={`${publicURL}/usuarios-alterar/${usuario.id}`} />
                                                         {usuario.ativo ?
                                                             <BotaoDesativar onClick={() => abrirConfirmarDesativacao(usuario.id)} /> :
                                                             <BotaoAtivar onClick={() => abrirConfirmarAtivacao(usuario.id)} />}

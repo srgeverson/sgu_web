@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '../context';
 import AuthorizeRoutes from './AuthorizeRoutes';
+import { publicURL } from '../config';
 //Containers
 import unauthenticatedContainer from '../containers/Unauthenticated';
 import authenticatedContainer from '../containers/Authenticated';
@@ -23,25 +24,25 @@ const Rotas = () => {
                 <AuthProvider>
                     <Routes>
                         {/* Rotas não autenticadas */}
-                        <Route path='/sgu_web/' element={unauthenticatedContainer(Login)} />
-                        <Route path='/sgu_web/criar-conta' element={unauthenticatedContainer(CriarConta)} />
-                        <Route path='/sgu_web/recuperar-senha' element={unauthenticatedContainer(RecuperarSenha)} />
-                        <Route path='/sgu_web/validar-acesso' element={unauthenticatedContainer(ValidarAcesso)} />
+                        <Route path={`${publicURL}/`} element={unauthenticatedContainer(Login)} />
+                        <Route path={`${publicURL}/criar-conta`} element={unauthenticatedContainer(CriarConta)} />
+                        <Route path={`${publicURL}/recuperar-senha`} element={unauthenticatedContainer(RecuperarSenha)} />
+                        <Route path={`${publicURL}/validar-acesso`} element={unauthenticatedContainer(ValidarAcesso)} />
                         {/* Rotas autenticadas */}
-                        <Route path='/sgu_web/painel-de-controle' element={<AuthorizeRoutes />}>
-                            <Route path='/sgu_web/painel-de-controle' element={authenticatedContainer(PainelDeControle)} />
+                        <Route path={`${publicURL}/painel-de-controle`} element={<AuthorizeRoutes />}>
+                            <Route path={`${publicURL}/painel-de-controle`} element={authenticatedContainer(PainelDeControle)} />
                         </Route>
-                        <Route path='/sgu_web/permissoes' element={<AuthorizeRoutes />}>
-                            <Route path='/sgu_web/permissoes' element={authenticatedContainer(PermissaoListar)} />
+                        <Route path={`${publicURL}/permissoes`} element={<AuthorizeRoutes />}>
+                            <Route path={`${publicURL}/permissoes`} element={authenticatedContainer(PermissaoListar)} />
                         </Route>
-                        <Route path='/sgu_web/usuarios' element={<AuthorizeRoutes />}>
-                            <Route path='/sgu_web/usuarios' element={authenticatedContainer(UsuarioListar)} />
+                        <Route path={`${publicURL}/usuarios`} element={<AuthorizeRoutes />}>
+                            <Route path={`${publicURL}/usuarios`} element={authenticatedContainer(UsuarioListar)} />
                         </Route>
-                        <Route path='/sgu_web/usuarios-alterar/:id' element={<AuthorizeRoutes />}>
-                            <Route path='/sgu_web/usuarios-alterar/:id' element={authenticatedContainer(UsuarioAlterar)} />
+                        <Route path={`${publicURL}/usuarios-alterar/:id`} element={<AuthorizeRoutes />}>
+                            <Route path={`${publicURL}/usuarios-alterar/:id`} element={authenticatedContainer(UsuarioAlterar)} />
                         </Route>
-                        <Route path='/sgu_web/usuarios-visualizar/:id' element={<AuthorizeRoutes />}>
-                            <Route path='/sgu_web/usuarios-visualizar/:id' element={authenticatedContainer(UsuarioVisualizar)} />
+                        <Route path={`${publicURL}/usuarios-visualizar/:id`} element={<AuthorizeRoutes />}>
+                            <Route path={`${publicURL}/usuarios-visualizar/:id`} element={authenticatedContainer(UsuarioVisualizar)} />
                         </Route>
                         <Route path="*" element={<PaginaInexistente />} />
                     </Routes>

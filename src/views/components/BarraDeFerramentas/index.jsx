@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Navbar, Nav, NavItem, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { publicURL } from '../../../core/config';
 import iconeUsuario from '../../../assets/images/icone_usuario.png';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
@@ -19,12 +20,12 @@ const BarraDeFerramentas = ({ handleLogout, dadosUsuario, alternarMenu }) => {
     }
 
     if (saindo)
-        return <Navigate to='/sgu_web/' state={{ mensagem: 'Sessão finalizada com sucesso!' }} replace />
+        return <Navigate to={`${publicURL}/`} state={{ mensagem: 'Sessão finalizada com sucesso!' }} replace />
 
     return (
         <Navbar color="success navbar-dark" light expand="md">
             <span className="navbar-toggler-icon cursor mr-1" onClick={() => alternarMenu()}></span>
-            <Link className="navbar-brand" to="/sgu_web/painel-de-controle">SGU - Sistema de Gestão de Usuários</Link>
+            <Link className="navbar-brand" to={`${publicURL}/painel-de-controle`}>SGU - Sistema de Gestão de Usuários</Link>
             <Nav className="ml-auto logo-barra-de-ferramentas" navbar>
                 <NavItem className="mr-1">
                     <img
@@ -37,7 +38,7 @@ const BarraDeFerramentas = ({ handleLogout, dadosUsuario, alternarMenu }) => {
                         {primeiroNome}
                     </DropdownToggle>
                     <DropdownMenu end>
-                        <Link className="dropdown-item" to="/sgu_web/perfil"><AssignmentIndIcon /> Perfil</Link>
+                        <Link className="dropdown-item" to={`${publicURL}/perfil`}><AssignmentIndIcon /> Perfil</Link>
                         <DropdownItem onClick={() => sair()}><MeetingRoomIcon /> Sair</DropdownItem>
                     </DropdownMenu>
                 </UncontrolledDropdown>

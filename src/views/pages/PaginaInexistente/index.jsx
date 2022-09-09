@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'reactstrap';
+import { publicURL } from '../../../core/config';
 import '../../../assets/styles/paginaInexistente.css';
 
 const PaginaInexistente = () => {
@@ -19,7 +20,7 @@ const PaginaInexistente = () => {
                                 Desculpe, ocorreu um erro, página solicitada não encontrada ou servidor temporariamente indisponível!
                             </div>
                             <div className="error-actions">
-                                <Link to="/sgu_web/painel-de-controle" className="btn btn-primary btn-lg mt-1">
+                                <Link to={`${publicURL}/painel-de-controle`} className="btn btn-primary btn-lg mt-1">
                                     <span className="glyphicon glyphicon-home"></span>
                                     Página Inicial
                                 </Link>

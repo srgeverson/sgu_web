@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { Form, FormGroup, Input, InputGroup, InputGroupText } from 'reactstrap';
+import { publicURL } from '../../../../core/config';
 import logo_sistema from '../../../../assets/images/logo_sistema.png';
 import AlertaErro from '../../../components/AlertaErro';
 import AlertaAtencao from '../../../components/AlertaAtencao';
@@ -22,7 +23,7 @@ const Login = () => {
         if (location && location.state) {
             if (location.state.email)
                 setEmail(location.state.email);
-            
+
             if (location.state.erro === true)
                 setErro({ mensagem: location.state.mensagem });
             else if (location.state.alerta === true)
@@ -76,7 +77,7 @@ const Login = () => {
         return true;
     }
     if (formularioSucesso)
-        return <Navigate to='/sgu_web/painel-de-controle' replace />
+        return <Navigate to={`${publicURL}/painel-de-controle`} replace />
 
     return (
         <div className="container-login">
@@ -113,9 +114,9 @@ const Login = () => {
                     </FormGroup>
                     <BotaoLogin aguardando={aguardando} />
                     <p className="text-center mt-2">
-                        <Link to='/sgu_web/criar-conta' className='remove-sublinhado'>Cadastrar</Link>
+                        <Link to={`${publicURL}/criar-conta`} className='remove-sublinhado'>Cadastrar</Link>
                         {' - '}
-                        <Link to='/sgu_web/recuperar-senha' className='remove-sublinhado'>Esqueceu a senha?</Link>
+                        <Link to={`${publicURL}/recuperar-senha`} className='remove-sublinhado'>Esqueceu a senha?</Link>
                     </p>
                 </Form>
             </div>

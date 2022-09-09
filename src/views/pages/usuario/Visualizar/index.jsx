@@ -6,6 +6,7 @@ import { Spinner } from 'reactstrap';
 import UsuarioService from '../../../../services/UsuarioService';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaErro from '../../../components/AlertaErro';
+import { publicURL } from '../../../../core/config';
 
 const UsuarioVisualizar = () => {
     const { id } = useParams();
@@ -47,7 +48,7 @@ const UsuarioVisualizar = () => {
         <div>
             <div className="d-flex justify-content-between">
                 <div className="mr-auto p-2">
-                    <Link to={"/sgu_web/usuarios"}>
+                    <Link to={`${publicURL}/usuarios`}>
                         <button className="btn btn-outline-success btn-sm">
                             Listar
                         </button>
@@ -59,7 +60,7 @@ const UsuarioVisualizar = () => {
                     <AlertaAtencao atencao={atencao} />
                 </div>
                 <div className="mr-auto p-2">
-                    <Link to={`/sgu_web/usuarios-alterar/${id}`}>
+                    <Link to={`${publicURL}/usuarios-alterar/${id}`}>
                         <button className="ml-1 btn btn-outline-warning btn-sm">
                             Editar
                         </button>

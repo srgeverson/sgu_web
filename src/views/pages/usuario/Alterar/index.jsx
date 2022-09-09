@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
+import { publicURL } from '../../../../core/config';
 import BotaoConfirmar from '../../../components/BotaoConfirmar';
 import AlertaErro from '../../../components/AlertaErro';
 import UsuarioService from '../../../../services/UsuarioService';
@@ -77,13 +78,13 @@ const UsuarioAlterar = () => {
     }
 
     if (formularioSucesso)
-        return <Navigate to='/sgu_web/usuarios' state={{ mensagem: 'Usuário alterado com sucesso!' }} replace />
+        return <Navigate to={`${publicURL}/usuarios`} state={{ mensagem: 'Usuário alterado com sucesso!' }} replace />
 
     return (
         <div>
             <div className="d-flex justify-content-between">
                 <div className="mr-auto p-2">
-                    <Link to={"/sgu_web/usuarios"}>
+                    <Link to={`${publicURL}/usuarios`}>
                         <button className="btn btn-outline-success btn-sm">
                             Listar
                         </button>
@@ -93,7 +94,7 @@ const UsuarioAlterar = () => {
                     <h2 className="display-4 titulo">Alterar Usuário</h2>
                 </div>
                 <div className="mr-auto p-2">
-                    <Link to={`/sgu_web/usuarios-visualizar/${id}`}>
+                    <Link to={`${publicURL}/usuarios-visualizar/${id}`}>
                         <button className="ml-1 btn btn-outline-info btn-sm">
                             Visualisar
                         </button>

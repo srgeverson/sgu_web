@@ -7,6 +7,7 @@ import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
 import BotaoValidar from '../../../components/BotaoValidar';
 import { authorizationServerRecuperarSenha } from '../../../../core/api';
+import { publicURL } from '../../../../core/config';
 
 const Login = () => {
     const [codigo, setCodigo] = useState('');
@@ -73,7 +74,7 @@ const Login = () => {
     }
 
     if (formularioSucesso)
-        return <Navigate to='/sgu_web/' state={sucesso} replace />
+        return <Navigate to={`${publicURL}/`} state={sucesso} replace />
 
     return (
         <div className="container-login">
@@ -134,9 +135,9 @@ const Login = () => {
                     </FormGroup>
                     <BotaoValidar aguardando={aguardando} />
                     <p className="text-center mt-2">
-                        <Link to='/sgu_web/criar-conta' className='remove-sublinhado'>Cadastrar</Link>
+                        <Link to={`${publicURL}/criar-conta`} className='remove-sublinhado'>Cadastrar</Link>
                         {' - '}
-                        <Link to='/sgu_web/recuperar-senha' className='remove-sublinhado'>Esqueceu a senha?</Link>
+                        <Link to={`${publicURL}/recuperar-senha`} className='remove-sublinhado'>Esqueceu a senha?</Link>
                     </p>
                 </Form>
             </div>
