@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import { publicURL } from '../../../../core/config';
 import BotaoConfirmar from '../../../components/BotaoConfirmar';
@@ -9,63 +9,36 @@ import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
 import ModalCarregando from '../../../components/ModalCarregando';
 
-const UsuarioAlterar = () => {
+const UsuarioCadastrar = () => {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
-    const [ativo, setAtivo] = useState(false);
+    const [senha, setSenha] = useState('');
+    const [senhaConfirma, setSenhaConfirma] = useState('');
     const [atencao, setAtencao] = useState('');
     const [sucesso, setSucesso] = useState('');
     const [erro, setErro] = useState('');
     const [aguardando, setAguardando] = useState(false);
     const [formularioSucesso, setFormularioSucesso] = useState(false);
     const usuarioService = new UsuarioService();
-    const { id } = useParams();
 
-    useEffect(() => {
-        receberDadosUsuario();
-        // eslint-disable-next-line
-    }, [id]);
-
-    const receberDadosUsuario = async () => {
-        setAguardando(true);
-        const usuarioPorId = await usuarioService.buscarPorId(id);
-        if (usuarioPorId.statusCode) {
-            if (usuarioPorId.statusCode === 500) {
-                setAtencao('');
-                setErro({ mensagem: usuarioPorId.message });
-            } else {
-                setErro('');
-                setAtencao({ mensagem: usuarioPorId.message });
-            }
-        } else {
-            if (usuarioPorId) {
-                setNome(usuarioPorId.nome);
-                setEmail(usuarioPorId.email);
-                setAtivo(usuarioPorId.ativo);
-            }
-        }
-        setAguardando(false);
-    }
-
-    const alterarUsuario = async () => {
+    const cadastrarUsuario = async () => {
         setErro('');
 
         if (!criticas())
             return;
 
         setAguardando(true);
-        const usuarioAlterado = await usuarioService.alterar(id, { nome, email, ativo });
-
-        if (usuarioAlterado.statusCode) {
-            if (usuarioAlterado.statusCode === 500) {
+        const usuarioCadastrado = await usuarioService.cadastrar( { nome, email, senha });
+        if (usuarioCadastrado.statusCode) {
+            if (usuarioCadastrado.statusCode === 500) {
                 setAtencao('');
-                setErro({ mensagem: usuarioAlterado.message });
+                setErro({ mensagem: usuarioCadastrado.message });
             } else {
                 setErro('');
-                setAtencao({ mensagem: usuarioAlterado.message });
+                setAtencao({ mensagem: usuarioCadastrado.message });
             }
         } else {
-            setSucesso({ mensagem: usuarioAlterado.message });
+            setSucesso({ mensagem: usuarioCadastrado.message });
             setFormularioSucesso(true);
         }
 
@@ -73,11 +46,15 @@ const UsuarioAlterar = () => {
     }
 
     const criticas = () => {
+        if (!email) return setAtencao({ mensagem: "Preencha o campo e-mail!" });
+        if (!senha) return setAtencao({ mensagem: "Preencha o campo senha!" });
+        if (!senhaConfirma) return setAtencao({ mensagem: "Preencha o campo confirma senha!" });
+        if (senha !== senhaConfirma) return setAtencao({ mensagem: "As senhas não são iguais!" });
         return true;
     }
 
     if (formularioSucesso)
-        return <Navigate to={`${publicURL}/usuarios`} state={{ mensagem: 'Usuário alterado com sucesso!' }} replace />
+        return <Navigate to={`${publicURL}/usuarios`} state={{ mensagem: 'Usuário cadastrado com sucesso!' }} replace />
 
     return (
         <div>
@@ -90,15 +67,9 @@ const UsuarioAlterar = () => {
                     </Link>
                 </div>
                 <div className="mr-auto p-2">
-                    <h2 className="display-4 titulo">Alterar Usuário</h2>
+                    <h2 className="display-4 titulo">Cadastrar Usuário</h2>
                 </div>
-                <div className="mr-auto p-2">
-                    <Link to={`${publicURL}/usuarios-visualizar/${id}`}>
-                        <button className="ml-1 btn btn-outline-info btn-sm">
-                            Visualisar
-                        </button>
-                    </Link>
-                </div>
+                <div className="mr-auto p-2" />
             </div>
             <hr />
             <AlertaErro erro={erro} />
@@ -106,10 +77,6 @@ const UsuarioAlterar = () => {
             <AlertaSucesso sucesso={sucesso} />
             <ModalCarregando isOpen={aguardando} pagina='Processando solicitação' />
             <Form>
-                <Input type="hidden"
-                    value={id}
-                    name="id"
-                    id="id" />
                 <FormGroup>
                     <Label for="nome">Nome</Label>
                     <Input
@@ -134,21 +101,28 @@ const UsuarioAlterar = () => {
                         onChange={(ev) => setEmail(ev.target.value)}
                     />
                 </FormGroup>
-                <FormGroup check inline>
-                    <Label for="ativo" check>
-                        <Input
-                            type="checkbox"
-                            checked={ativo}
-                            value={ativo}
-                            name="ativo"
-                            id="ativo"
-                            autoComplete="ativo"
-                            onChange={() => setAtivo(!ativo)}
-                        /> Ativo
-                    </Label>
+                <FormGroup>
+                    <Label for="senha">Senha</Label>
+                    <Input
+                        type="password"
+                        value={senha}
+                        name="senha"
+                        id="senha"
+                        placeholder="Senha do usuário"
+                        onChange={(ev) => setSenha(ev.target.value)} required />
+                </FormGroup>
+                <FormGroup>
+                    <Label for="senha">Confirma senha</Label>
+                    <Input
+                        type="password"
+                        value={senhaConfirma}
+                        name="senhaConfirma"
+                        id="senhaConfirma"
+                        placeholder="Confirmar senha do usuário"
+                        onChange={(ev) => setSenhaConfirma(ev.target.value)} required />
                 </FormGroup>
                 <br /><br />
-                <Link onClick={() => alterarUsuario()} to="#">
+                <Link onClick={() => cadastrarUsuario()} to="#">
                     <BotaoConfirmar aguardando={aguardando} />
                 </Link>
             </Form>
@@ -156,4 +130,4 @@ const UsuarioAlterar = () => {
     )
 }
 
-export default UsuarioAlterar;
+export default UsuarioCadastrar;

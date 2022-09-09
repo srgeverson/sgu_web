@@ -40,6 +40,17 @@ class UsuarioService {
             });
     }
 
+    async cadastrar(dados) {
+        return await api(this.token)
+            .post(`/usuarios/com-senha`, dados)
+            .then((callbackSuccess) => {
+                return callbackSuccess.data;
+            })
+            .catch((callbackError) => {
+               return errorHandler(callbackError.response);
+            });
+    }
+
     async desativar(id) {
         return await api(this.token)
             .put(`/usuarios/desativa/${id}`)

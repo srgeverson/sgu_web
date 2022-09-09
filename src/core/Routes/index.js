@@ -15,6 +15,7 @@ import PermissaoListar from '../../views/pages/permissao/Listar';
 import UsuarioAlterar from '../../views/pages/usuario/Alterar';
 import UsuarioListar from '../../views/pages/usuario/Listar';
 import UsuarioVisualizar from '../../views/pages/usuario/Visualizar';
+import UsuarioCadastrar from '../../views/pages/usuario/Cadastrar';
 import PaginaInexistente from '../../views/pages/PaginaInexistente';
 
 const Rotas = () => {
@@ -43,6 +44,9 @@ const Rotas = () => {
                         </Route>
                         <Route path={`${publicURL}/usuarios-visualizar/:id`} element={<AuthorizeRoutes />}>
                             <Route path={`${publicURL}/usuarios-visualizar/:id`} element={authenticatedContainer(UsuarioVisualizar)} />
+                        </Route>
+                        <Route path={`${publicURL}/usuarios-cadastrar`} element={<AuthorizeRoutes />}>
+                            <Route path={`${publicURL}/usuarios-cadastrar`} element={authenticatedContainer(UsuarioCadastrar)} />
                         </Route>
                         <Route path="*" element={<PaginaInexistente />} />
                     </Routes>
