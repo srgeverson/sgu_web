@@ -7,6 +7,7 @@ import UsuarioService from '../../../../services/UsuarioService';
 import { useEffect } from 'react';
 import AlertaAtencao from '../../../components/AlertaAtencao';
 import AlertaSucesso from '../../../components/AlertaSucesso';
+import ModalCarregando from '../../../components/ModalCarregando';
 
 const UsuarioAlterar = () => {
     const [nome, setNome] = useState('');
@@ -103,6 +104,7 @@ const UsuarioAlterar = () => {
             <AlertaErro erro={erro} />
             <AlertaAtencao atencao={atencao} />
             <AlertaSucesso sucesso={sucesso} />
+            <ModalCarregando isOpen={aguardando} pagina='Processando solicitação' />
             <Form>
                 <Input type="hidden"
                     value={id}
