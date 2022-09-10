@@ -40,6 +40,17 @@ class UsuarioService {
             });
     }
 
+    async buscarPermissoesPorIdUsuario(id){
+        return await api(this.token)
+        .get(`/usuarios/${id}/permissoes`)
+        .then((callbackSuccess) => {
+            return callbackSuccess.data;
+        })
+        .catch((callbackError) => {
+           return errorHandler(callbackError.response);
+        }); 
+    }
+
     async cadastrar(dados) {
         return await api(this.token)
             .post(`/usuarios/com-senha`, dados)
