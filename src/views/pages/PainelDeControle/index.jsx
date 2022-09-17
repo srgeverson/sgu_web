@@ -3,28 +3,13 @@ import ErrorIcon from '@mui/icons-material/Error';
 import WarningIcon from '@mui/icons-material/Warning';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import { FormGroup, Input, Label } from 'reactstrap';
-import { format } from 'date-fns';
-import pt from 'date-fns/locale/pt';
+import { FormGroup } from 'reactstrap';
 import BotaoPesquisar from '../../components/BotaoPesquisar';
-import BotaoRelatorio from '../../components/BotaoRelatorio';
 import { Chart } from "react-google-charts";
 
 const PainelDeControle = () => {
 
-    const [dataInicio, setDataInicio] = useState(format(new Date(), 'yyyy-MM-dd', { locale: pt }));
-
-    const ajustaDataInicio = (dataOriginal) => {
-        dataOriginal ? setDataInicio(format(new Date(dataOriginal), 'yyyy-MM-dd', { locale: pt })) : setDataInicio("");
-    }
-
-    const [dataFim, setDataFim] = useState(format(new Date(), 'yyyy-MM-dd', { locale: pt }));
-
-    const ajustaDataFim = (dataOriginal) => {
-        dataOriginal ? setDataFim(format(new Date(dataOriginal), 'yyyy-MM-dd', { locale: pt })) : setDataFim("");
-    }
-
-    const [atendimentos] = useState({ concluidos: 100, pendentes: 400, urgentes: 200, });
+   const [atendimentos] = useState({ concluidos: 100, pendentes: 400, urgentes: 200, });
 
     const options = {
         title: "Quantidade vs. Período",
@@ -87,57 +72,12 @@ const PainelDeControle = () => {
             </div>
             <hr />
             <div className="form-group row">
-                <div className="col-sm-5">
-                    <FormGroup>
-                        <Label for="nomeCliente">Nome do cliente</Label>
-                        <Input
-                            type="text"
-                            //value={nomeCliente}
-                            name="nomeCliente"
-                            id="nomeCliente"
-                            autoComplete="nomeCliente"
-                            //onChange={(ev) => this.onChangeInput("nomeCliente", ev)}
-                            placeholder="Filtar por cliente" />
-                    </FormGroup>
-                </div>
-                <div className="col-sm-3">
-                    <FormGroup>
-                        <Label for="tecnico">Técnico</Label>
-                        <Input
-                            id="tecnico"
-                            name="tecnico"
-                            //onChange={(ev) => this.onChangeInput("tecnico", ev)}
-                            type="text"
-                            //value={tecnico}
-                            autoComplete="tecnico"
-                            placeholder="Filtrar por técnico" />
-                    </FormGroup>
-                </div>
-                <div className="col-sm-2">
-                    <FormGroup>
-                        <Label for="dataInicio">Início</Label>
-                        <Input type="date" name="dataInicio" id="dataInicio" placeholder="Data inicial" value={dataInicio} onChange={(ev) => ajustaDataInicio(ev.target.value)} />
-                    </FormGroup>
-                </div>
-                <div className="col-sm-2">
-                    <FormGroup>
-                        <Label for="dataFim">Fim</Label>
-                        <Input type="date" name="dataFim" id="dataFim" placeholder="Data final" value={dataFim} onChange={(ev) => ajustaDataFim(ev.target.value)} />
-                    </FormGroup>
-                </div>
-            </div>
-            <div className="form-group row">
                 <div className="col-sm-2">
                     <FormGroup>
                         <BotaoPesquisar onClickPesquisar={() => {
                             //this.props.limparUsuarios();
                             //this.pesquisarUsuarios();
                         }} />
-                    </FormGroup>
-                </div>
-                <div className="col-sm-2">
-                    <FormGroup>
-                        <BotaoRelatorio />
                     </FormGroup>
                 </div>
             </div>
