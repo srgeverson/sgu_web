@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { encode } from 'base-64';
 
-const client_id = 'api_node';
-const client_secret = '123321';
-const url_api = `http://localhost:8080/v1`;
+const client_id = process.env.CLIENT_ID ? process.env.CLIENT_ID : 'api_node';
+const client_secret = process.env.CLIENT_SECRET ? process.env.CLIENT_SECRET : '123321';
+const port = process.env.SERVER_PORT ? process.env.SERVER_PORT : 8181;
+const url = process.env.SERVER_URL ? process.env.SERVER_URL : `http://mystore-app.ddns.net`;
+const url_api = process.env.SERVER_URL ? process.env.SERVER_URL : `${url}:${port}/v1`;
 
 const api = (token) => {
     return axios.create({
