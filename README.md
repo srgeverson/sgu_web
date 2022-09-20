@@ -1,4 +1,4 @@
-# SGU Web - Sistema de Gerenciamento de Usuários
+# <a href="https://srgeverson.github.io/sgu_web">SGU Web - Sistema de Gerenciamento de Usuários</a>
 Esta aplicação irá gerir os usuários cadastrados.
 
 ### Pré-requisitos
@@ -9,12 +9,12 @@ Antes de começar, você vai precisar ter instalado em sua máquina as seguintes
 [Git](https://git-scm.com) e [Node.js](https://nodejs.org/en/)). 
 Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/)
 
-💡O arquivo ".ENV" que aqui é orientado a ser criado é para ambiente de teste e utilização no docker, caso seja criado um ambiente manualmete crie as variáveis normalmente com os comando <b>export no linux</b> e <b>set para windows</b> com <b>terminal ou cmd</b> respectivamente.
+💡O arquivo ".ENV" que aqui é orientado a ser criado é para ambiente de teste e utilização no docker, caso seja criado um ambiente manualmete crie as variáveis normalmente com os comando <b>export </b>no linux e <b>set </b>para windows com <b>terminal ou cmd</b> respectivamente.
 
 ### 🛠️ Comando executado durante a construção da aplicação
 
 ```bash
-# Instalar o react e o next [https://nextjs.org/docs/getting-started](https://nextjs.org/docs/getting-started).
+# Instalar o react e o next [React JS](https://reactjs.org/docs/create-a-new-react-app.html#gatsby-focus-wrapper).
 $ npx create-react-app sac-web
 
 # Instala o gerenciador de rotas [Router DOM](https://v5.reactrouter.com/web/guides/quick-start).
@@ -58,7 +58,7 @@ $ SERVER_URL='URL da API.'
 $ SERVER_PORT='Porta da API.'
 
 # Gráficos do googgle
-$ npm install react-google-charts --save
+$ npm install --save react-google-charts
 
 # Autenticação Base64
 $ npm install --save base-64
@@ -100,6 +100,6 @@ $ npm start
 
 * **Geverson Souza** - [Geverson Souza](https://www.linkedin.com/in/srgeverson/)
 
-## 📌 Versão ainda em desenvolvimento
+## 📌 Versão 0.1.0
 
 É utilizado o [Github](https://github.com/) para controle de versão.
