@@ -67,6 +67,9 @@ $ npm install --save base-64
 $ CLIENT_ID='Nome de usuário para a autenticação da API.'
 $ CLIENT_SECRET='Senha de usuário para a autenticação da API.'
 
+# Deploy GitHub Pages
+$ npm install --save-dev gh-pages
+
 # Rodar o projeto
 $ npm start
 
