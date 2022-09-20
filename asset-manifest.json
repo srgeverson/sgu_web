@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/sgu_web/static/css/main.82c59042.css",
+    "main.js": "/sgu_web/static/js/main.8c76c409.js",
+    "static/media/logo_sistema.png": "/sgu_web/static/media/logo_sistema.5c35611e726f84e868d2.png",
+    "index.html": "/sgu_web/index.html",
+    "main.82c59042.css.map": "/sgu_web/static/css/main.82c59042.css.map",
+    "main.8c76c409.js.map": "/sgu_web/static/js/main.8c76c409.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.82c59042.css",
+    "static/js/main.8c76c409.js"
+  ]
+}
