@@ -100,6 +100,6 @@ $ npm start
 
 * **Geverson Souza** - [Geverson Souza](https://www.linkedin.com/in/srgeverson/)
 
-## 📌 Versão 0.1.0
+## 📌 Versão 1.0.0
 
 É utilizado o [Github](https://github.com/) para controle de versão.
